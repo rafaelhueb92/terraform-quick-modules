@@ -1,7 +1,7 @@
 data "archive_file" "lambda_zip" {
   type        = "zip"
-  source_dir  = "${path.module}/lambda_function"
-  output_path = "${path.module}/example_lambda.zip"
+  source_dir  = "${path.module}/../../../${var.path_source_dir_lambda_code}"
+  output_path = "${path.module}/lambda.zip"
 }
 
 resource "aws_lambda_function" "example_lambda" {
@@ -21,14 +21,15 @@ resource "aws_lambda_function" "example_lambda" {
   event_source_token = aws_sqs_queue.this.arn
 
   depends_on = [
-    resource.aws_sqs_queue.this
+    resource.aws_sqs_queue.this,
+    aws_iam_role.lambda_exec
   ]
 
 }
 
 resource "aws_iam_role" "lambda_exec" {
-  name               = "lambda-exec-role"
-  assume_role_policy = file("iam_policy.json")
+  name               = "lambda-${var.function_name}-exec-role"
+  assume_role_policy = file("${path.module}/templates/iam_policy.json")
 }
 
 data "template_file" "lambda_policy" {
@@ -40,7 +41,7 @@ data "template_file" "lambda_policy" {
 }
 
 resource "aws_iam_policy" "lambda_sqs" {
-  name   = "lambda-${var.function_name}-sqs-${}-policy"
+  name   = "lambda-${var.function_name}-sqs-${local.sqs_name}-policy"
   policy = data.template_file.lambda_policy.rendered
 }
 
@@ -50,11 +51,11 @@ resource "aws_iam_role_policy_attachment" "lambda_sqs_attachment" {
 }
 
 resource "aws_sqs_queue" "this" {
-  name                      = "this"
-  delay_seconds             = 90
-  max_message_size          = 2048
-  message_retention_seconds = 86400
-  visibility_timeout_seconds = 30
+  name                      = local.sqs_name
+  delay_seconds             = var.delay_seconds
+  max_message_size          = var.max_message_size
+  message_retention_seconds = var.message_retention_seconds
+  visibility_timeout_seconds = var.visibility_timeout_seconds
 }
 
 data "aws_caller_identity" "current" {}
