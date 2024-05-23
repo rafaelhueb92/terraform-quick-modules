@@ -57,9 +57,3 @@ resource "aws_sqs_queue" "this" {
   message_retention_seconds = var.message_retention_seconds
   visibility_timeout_seconds = var.visibility_timeout_seconds
 }
-
-data "aws_caller_identity" "current" {}
-
-output "account_id" {
-  value = data.aws_caller_identity.current.account_id
-}
