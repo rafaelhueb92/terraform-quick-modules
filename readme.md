@@ -2,6 +2,6 @@
 
 <h2> Lambda consuming SQS </h2>
 
-<p> Create a module and use source like this: </p>
+<p> Create a module and use this source: </p>
 
 <p> git::https://github.com/rafaelhueb92/terraform-quick-modules.git?ref=lambda/sqs/consumer </p>
