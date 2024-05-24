@@ -12,7 +12,7 @@ variable "runtime" {
     default = "nodejs14.x"
 }
 
-variable "sqs_name" {
+variable "dynamodb_name" {
     type = string
     default = ""
 }

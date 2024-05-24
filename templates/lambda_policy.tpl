@@ -3,17 +3,15 @@
   "Statement": [
     {
       "Effect": "Allow",
-      "Action": "sqs:ReceiveMessage",
-      "Resource": "${queue_arn}"
-    },
-    {
-      "Effect": "Allow",
       "Action": [
-        "logs:CreateLogGroup",
-        "logs:CreateLogStream",
-        "logs:PutLogEvents"
+        "dynamodb:GetItem",
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:Scan",
+        "dynamodb:Query"
       ],
-      "Resource": "*"
+      "Resource": "${dynamodb_table_arn}"
     }
   ]
 }
