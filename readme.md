@@ -1,55 +1,38 @@
-Terraform Quick Modules: Lambda and DynamoDB
-Overview
-Terraform-Quick-Modules repository provides a collection of reusable Terraform modules for provisioning resources in AWS. This particular module, located in the "lambda/dynamodb" branch, allows users to quickly set up AWS Lambda functions and DynamoDB tables in their AWS accounts.
+# Terraform Quick Modules - Lambda DynamoDB Module
 
-Getting Started
-Cloning the Repository
-To get started, clone the Terraform-Quick-Modules repository to your local environment:
+This repository contains a Terraform module for quickly provisioning a Lambda function that accesses a DynamoDB table on AWS.
 
-bash
-Copiar código
-git clone -b lambda/dynamodb https://github.com/rafaelhueb92/terraform-quick-modules.git
-Configuring AWS Credentials
-Before proceeding, ensure that you have your AWS credentials configured locally. You can export your access keys as environment variables or configure the ~/.aws/credentials file. Make sure the credentials have sufficient permissions to create the necessary resources.
+## Table of Contents
 
-Using the Module in Your Terraform Project
-Once you have cloned the repository and configured your AWS credentials, you can start using the module in your Terraform project. Below is an example of how to use the module to create a Lambda function and a DynamoDB table:
+- [Introduction](#introduction)
+- [Prerequisites](#prerequisites)
+- [Usage](#usage)
+- [Inputs](#inputs)
+- [Outputs](#outputs)
+- [Example](#example)
+- [Contributing](#contributing)
+- [License](#license)
 
-terraform
-Copiar código
-provider "aws" {
-  region = "us-west-2"
-}
+## Introduction
 
+The Terraform Quick Modules provide pre-built modules to streamline the process of setting up common AWS infrastructure configurations. This specific module (`lambda-dynamodb`) focuses on provisioning a Lambda function and a DynamoDB table, along with the necessary IAM policies.
+
+## Prerequisites
+
+Before using this Terraform module, ensure you have the following prerequisites:
+
+- [Terraform](https://www.terraform.io/downloads.html)
+- [AWS CLI](https://aws.amazon.com/cli/)
+
+You also need to configure your AWS credentials on your local machine using the `aws configure` command.
+
+## Usage
+
+To use this module in your Terraform configuration, include it as a source module in your `.tf` file:
+
+```hcl
 module "lambda_dynamodb" {
-  source              = "./lambda-dynamodb"
-  function_name       = "my-lambda-function"
-  lambda_handler      = "lambda_function.lambda_handler"
-  runtime             = "python3.8"
-  environment_variables = {
-    TABLE_NAME = "my-dynamodb-table"
-  }
+  source = "github.com/rafaelhueb92/terraform-quick-modules//lambda/dynamodb"
+  
+  # Specify input variables here, if any
 }
-
-output "lambda_function_arn" {
-  value = module.lambda_dynamodb.lambda_function_arn
-}
-
-output "dynamodb_table_name" {
-  value = module.lambda_dynamodb.dynamodb_table_name
-}
-In this example, we are using the lambda-dynamodb module from the Terraform-Quick-Modules repository. We pass several necessary parameters, such as the Lambda function name, handler, runtime, and environment variables required for the Lambda function to communicate with the DynamoDB table.
-
-Applying the Configurations
-After defining your main.tf file, you can execute the following commands to apply the configurations:
-
-bash
-Copiar código
-terraform init
-terraform apply
-This will initialize Terraform and apply the configurations defined in your main.tf file. Make sure to review the proposed changes before confirming the application.
-
-Conclusion
-The Terraform-Quick-Modules repository offers a convenient way to provision common resources in AWS quickly and easily. By using pre-configured modules like the one available in the "lambda/dynamodb" branch, you can save time and effort in setting up cloud infrastructure.
-
-Feel free to explore other modules available in the repository and adapt them to the specific needs of your projects. With the flexibility and power of Terraform, the possibilities are endless.
